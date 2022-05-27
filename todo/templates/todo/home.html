@@ -1,0 +1,245 @@
+{% extends 'todo/base.html' %} {% load static %}
+
+<head>
+  <link rel="stylesheet" href="{% static 'todo/style.css' %}" />
+</head>
+
+{% block content %}
+<div class="d-flex justify-content-center form-wrapper">
+  <img class="cartoons align-self-end mb-3 me-3 d-none d-xl-block d-lg-block d-md-block"
+    src="{% static 'todo/bunny.png' %}" alt="sleeping bunny">
+  {% load crispy_forms_tags %}
+  <form class="d-flex flex-column justify-content-center mx-5 my-3 gap-1 px-4 py-3 bg-white position-relative form"
+    action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- {{ form | crispy}} -->
+
+    <div>{{ form.title }}</div>
+    <div>{{ form.content }}</div>
+    <div>{{ form.priority }}</div>
+    <div>{{ form.tag }}</div>
+    <button
+      class="btn btn-primary d-flex align-items-center justify-content-center align-self-end m-3  rounded-circle position-absolute bottom-0 end-0"
+      type="submit" style="width: 5rem; height: 5rem;">
+      <i class="fa-solid fa-plus fs-1"></i>
+    </button>
+  </form>
+  <img class="cartoons align-self-end mb-4 ms-3 d-none d-xl-block d-lg-block d-md-block"
+    src="{% static 'todo/turtle.png' %}" alt="champion turtle">
+
+</div>
+<ul class="nav nav-pills mt-4 mb-2 d-flex justify-content-center" id="pills-tab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
+      role="tab" aria-controls="pills-home" aria-selected="true" style="width: 9rem; height: 3rem;"><h4>All Tasks</h4></button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button"
+      role="tab" aria-controls="pills-profile" aria-selected="false" style="width: 9rem; height: 3rem;"><h4>Todos</h4></button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button"
+      role="tab" aria-controls="pills-contact" aria-selected="false" style="width: 6rem; height: 3rem;"><h4>Dones</h4></button>
+  </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+    <div class="d-flex flex-wrap flex-row justify-content-center align-items-start pt-1 pb-4">
+      {% for todo in todos %}
+      <div {% if todo.is_done == False %}
+        class="d-flex flex-column justify-content-between my-3 mx-4 position-relative todo-card" 
+        {% else %}
+        class="d-flex flex-column justify-content-between my-3 mx-4 position-relative done-card" 
+        {% endif %}>
+        <div>
+          <h5 {% if todo.is_done == False %} 
+          class="card-title pb-2 pe-5 ps-3 py-3 todo-title" 
+          {% else %}
+            class="card-title pb-2 pe-5 ps-3 py-3 done-title" 
+            {% endif %}>
+            {{ todo.title }}
+          </h5>
+          <p class="card-text pe-5 ps-3 py-2">{{ todo.content }}</p>
+        </div>
+        <div class="ps-3 pb-2">
+          <span class="badge bg-primary px-2"><i class="fa-solid fa-tags fs-6"></i>
+
+            {% if todo.tag %}
+            <span>{{ todo.tag }}</span>
+            {% else %}
+            <span> Daily</span>
+            {% endif %}
+          </span>
+
+          {% if todo.priority == 'High Priority' %}
+          <span class="badge bg-danger px-2"> <i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% elif todo.priority == 'Middle Priority' %}
+          <span class="badge bg-warning px-2"><i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% else %}
+          <span class="badge bg-success px-2"><i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% endif %}
+        </div>
+        <div class="d-flex flex-column card-side-bar">
+          <a href="{% url 'change_is_done' todo.id %}">
+            <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-success">
+              <img class="img-styles" src="{% static 'todo/tick_icon.png' %}" alt="" />
+            </button>
+          </a>
+
+        <a href="{% url 'update' todo.id %}">
+          <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-warning">
+            <img class="w-75 h-75" src="{% static 'todo/edit_icon.png' %}" alt="" />
+          </button>
+        </a>
+
+        <a href="{% url 'delete' todo.id %}">
+          <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-danger">
+            <img class="img-styles" src="{% static 'todo/trash_icon.png' %}" alt="" />
+          </button>
+        </a>  
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+    <div class="d-flex flex-wrap flex-row justify-content-center align-items-start pt-1 pb-4">
+      {% for todo in todos %}
+      {% if todo.is_done == False %}        
+      <div 
+      {% if todo.is_done == False %}
+        class="d-flex flex-column justify-content-between my-3 mx-4 position-relative todo-card" 
+        {% else %}
+        class="d-flex flex-column justify-content-between my-3 mx-4 position-relative done-card" 
+        {% endif %}>
+        <div>
+          <h5 
+          {% if todo.is_done == False %} 
+          class="card-title pb-2 pe-5 ps-3 py-3 todo-title" 
+          {% else %}
+          class="card-title pb-2 pe-5 ps-3 py-3 done-title" 
+          {% endif %}>
+            {{ todo.title }}
+          </h5>
+          <p class="card-text pe-5 ps-3 py-2">{{ todo.content }}</p>
+        </div>
+        <div class="ps-3 pb-2">
+          <span class="badge bg-primary px-2"><i class="fa-solid fa-tags fs-6"></i>
+
+            {% if todo.tag %}
+            <span>{{ todo.tag }}</span>
+            {% else %}
+            <span> Daily</span>
+            {% endif %}
+          </span>
+
+          {% if todo.priority == 'High Priority' %}
+          <span class="badge bg-danger px-2"> <i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% elif todo.priority == 'Middle Priority' %}
+          <span class="badge bg-warning px-2"><i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% else %}
+          <span class="badge bg-success px-2"><i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% endif %}
+        </div>
+        <div class="d-flex flex-column card-side-bar">
+        <a href="{% url 'change_is_done' todo.id %}">
+          <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-success">
+            <img class="img-styles" src="{% static 'todo/tick_icon.png' %}" alt="" />
+          </button>
+        </a>
+
+          <a href="{% url 'update' todo.id %}">
+            <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-warning">
+              <img class="w-75 h-75" src="{% static 'todo/edit_icon.png' %}" alt="" />
+            </button>
+          </a>
+
+          <a href="{% url 'delete' todo.id %}">
+            <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-danger">
+              <img class="img-styles" src="{% static 'todo/trash_icon.png' %}" alt="" />
+            </button>
+          </a>  
+        </div>
+      </div>  
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+    <div class="d-flex flex-wrap flex-row justify-content-center align-items-start pt-1 pb-4">
+      {% for todo in todos %}
+      {% if todo.is_done == True %}        
+      <div 
+      {% if todo.is_done == False %}
+        class="d-flex flex-column justify-content-between my-3 mx-4 position-relative todo-card" 
+        {% else %}
+        class="d-flex flex-column justify-content-between my-3 mx-4 position-relative done-card" 
+        {% endif %}>
+        <div>
+          <h5 
+          {% if todo.is_done == False %} 
+          class="card-title pb-2 pe-5 ps-3 py-3 todo-title" 
+          {% else %}
+          class="card-title pb-2 pe-5 ps-3 py-3 done-title" 
+          {% endif %}>
+            {{ todo.title }}
+          </h5>
+          <p class="card-text pe-5 ps-3 py-2">{{ todo.content }}</p>
+        </div>
+        <div class="ps-3 pb-2">
+          <span class="badge bg-primary px-2"><i class="fa-solid fa-tags fs-6"></i>
+
+            {% if todo.tag %}
+            <span>{{ todo.tag }}</span>
+            {% else %}
+            <span> Daily</span>
+            {% endif %}
+          </span>
+
+          {% if todo.priority == 'High Priority' %}
+          <span class="badge bg-danger px-2"> <i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% elif todo.priority == 'Middle Priority' %}
+          <span class="badge bg-warning px-2"><i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% else %}
+          <span class="badge bg-success px-2"><i class="fa-solid fa-circle-exclamation fs-6"></i>
+            {{ todo.priority }}</span>
+          {% endif %}
+        </div>
+        <div class="d-flex flex-column card-side-bar">
+          <a href="{% url 'change_is_done' todo.id %}">
+            <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-success">
+              <img class="img-styles" src="{% static 'todo/tick_icon.png' %}" alt="" />
+            </button>
+          </a>
+
+          <a href="{% url 'update' todo.id %}">
+            <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-warning">
+              <img class="w-75 h-75" src="{% static 'todo/edit_icon.png' %}" alt="" />
+            </button>
+          </a>
+
+          <a href="{% url 'delete' todo.id %}">
+            <button class="d-flex justify-content-center align-items-center rounded-circle p-0 mb-2 border-0 bg-danger">
+              <img class="img-styles" src="{% static 'todo/trash_icon.png' %}" alt="" />
+            </button>
+          </a>  
+        </div>
+      </div>  
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock content %}

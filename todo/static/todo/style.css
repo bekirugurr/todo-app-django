@@ -1,0 +1,78 @@
+
+.form-wrapper{
+  background: linear-gradient(to bottom, #33ccff 0%, #ff99cc 100%);
+}
+.form{
+  border-radius: 10px;
+}
+.cartoons{
+  width: 10rem;
+  height: 10rem;
+}
+
+.input-style{
+  background-color: #de6262;
+  color: red;
+}
+
+.fa-plus{
+  font-size: 2rem;
+}
+
+.card-side-bar {
+  position: absolute;
+  top: 3.5rem;
+  right: 0.5rem;
+  border: none;
+}
+
+button {
+  width: 2.3rem;
+  height: 2.3rem;
+}
+.todo-card {
+  width: 18rem;
+  height: 15rem;
+  /* padding-right: 4rem; */
+  border: 4px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(to right, white, white),
+    linear-gradient(to right,  #de6262, #ad9af9 );
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+}
+.done-card {
+  width: 18rem;
+  height: 15rem;
+  /* padding-right: 4rem; */
+  border: 4px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(to right, white, white),
+    linear-gradient(to right, #69b2fa, #b3d7f9);
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+}
+.todo-title {
+    margin: -1px ;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    color: white;
+    
+  background: linear-gradient(to right, #de6262, #ad9af9 ),
+    linear-gradient(to right,  #de6262, #ad9af9 );
+
+}
+.done-title {
+  margin: -1px ;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  color: white;
+  
+background: linear-gradient(to right, #69b2fa, #b3d7f9),
+  linear-gradient(to right, #69b2fa, #b3d7f9);
+
+}
+.img-styles {
+  width: 60%;
+  height: 60%;
+}
